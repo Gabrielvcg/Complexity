@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 import org.apache.commons.math3.fitting.WeightedObservedPoint;
 
-import algoritmos.fibonacci;
+import algoritmos.Fibonacci;
 import us.lsi.common.Pair;
 import us.lsi.curvefitting.DataFile;
 import us.lsi.curvefitting.Exponential;
@@ -15,7 +15,7 @@ import us.lsi.curvefitting.GenData;
 import us.lsi.curvefitting.PowerLog;
 import us.lsi.graphics.MatPlotLib;
 
-public class fibonacciComplexity {
+public class FibonacciComplexity {
 
 	 
 		private static Integer nMin = 1; // n mínimo para el cálculo 
@@ -27,14 +27,14 @@ public class fibonacciComplexity {
 	    
 	    public static void genDataFib() {
 	    	String file = "ficheros_generados/FIB.txt";
-			Function<Integer,Long> f1 = GenData.time(n -> fibonacci.fibonacci(n));
+			Function<Integer,Long> f1 = GenData.time(n -> Fibonacci.fibonacci(n));
 //			Integer tMin,Integer tMax,Integer tInc,Integer numIter,Integer numIterWarmup
 			GenData.tiemposEjecucionAritmetica(f1,file,nMin,nMax,nIncr,nIter,nIterWarmup);
 	    }
 
 	    public static void genDataFibMem() {
 	    	String file = "ficheros_generados/FIBMEM.txt";
-			Function<Integer,Long> f1 = GenData.time(n -> fibonacci.fibonacciMemoria(n,new HashMap<Integer,Integer>()));
+			Function<Integer,Long> f1 = GenData.time(n -> Fibonacci.fibonacciMemoria(n,new HashMap<Integer,Integer>()));
 //			Integer tMin,Integer tMax,Integer tInc,Integer numIter,Integer numIterWarmup
 			GenData.tiemposEjecucionAritmetica(f1,file,nMin,nMax,nIncr,nIter,nIterWarmup);
 	    }
