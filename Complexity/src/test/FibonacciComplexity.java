@@ -70,8 +70,8 @@ public class FibonacciComplexity {
 	    }
 
 	    public static void main(String[] args) {
-	    	genDataFib();
-	     	genDataFibMem();
+	    	//genDataFib();
+	     	//genDataFibMem();
 	    	showFib();
 	    	showFibMem();
 	        showCombined();

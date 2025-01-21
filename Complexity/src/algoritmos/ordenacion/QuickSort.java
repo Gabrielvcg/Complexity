@@ -1,63 +1,81 @@
 package algoritmos.ordenacion;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuickSort {
 
-	static Integer seleccionPivote(List<Integer> ls) {
-	    int randomIndex = (int) (Math.random() * ls.size());
-	    return ls.get(randomIndex);
+	public static void quickSort(List<Integer> list) {
+		if (list == null || list.size() <= 1)
+			return;
+		quickSort(list, 0, list.size() - 1);
 	}
-	
-    // Método principal para implementar QuickSort (in-place)
-    public static void quickSort(List<Integer> ls) {
-        quickSortHelper(ls, 0, ls.size() - 1);
-    }
 
-    // Método auxiliar para realizar QuickSort recursivamente
-    private static void quickSortHelper(List<Integer> ls, int low, int high) {
-        if (low < high) {
-            // Particionar la lista y obtener el índice del pivote
-            int pivotIndex = partition(ls, low, high);
+	private static void quickSort(List<Integer> list, int low, int high) {
+		if (low < high) {
+			// Seleccionar pivote y particionar
+			int pivotIndex = partition(list, low, high);
 
-            // Ordenar recursivamente las dos mitades
-            quickSortHelper(ls, low, pivotIndex - 1);
-            quickSortHelper(ls, pivotIndex + 1, high);
-        }
-    }
+			// Ordenar recursivamente las dos mitades
+			quickSort(list, low, pivotIndex - 1);
+			quickSort(list, pivotIndex + 1, high);
+		}
+	}
 
-    // Método para particionar la lista y ubicar el pivote en su posición correcta
-    private static int partition(List<Integer> ls, int low, int high) {
-        Integer pivot = seleccionPivote(ls); // Usamos el último elemento como pivote
-        int i = low - 1; // Índice para elementos menores al pivote
+	private static int partition(List<Integer> list, int low, int high) {
+		// Seleccionar pivote (usamos mediana de 3 para mejor rendimiento)
+		int mid = low + (high - low) / 2;
+		int pivotIndex = medianOfThree(list, low, mid, high);
+		swap(list, pivotIndex, high);
+		int pivot = list.get(high);
 
-        for (int j = low; j < high; j++) {
-            if (ls.get(j) <= pivot) {
-                i++;
-                // Intercambiar ls[i] y ls[j]
-                swap(ls, i, j);
-            }
-        }
+		// Índice del elemento más pequeño
+		int i = low - 1;
 
-        // Colocar el pivote en su posición correcta
-        swap(ls, i + 1, high);
+		// Particionar alrededor del pivote
+		for (int j = low; j < high; j++) {
+			if (list.get(j) <= pivot) {
+				i++;
+				swap(list, i, j);
+			}
+		}
 
-        return i + 1; // Retorna el índice del pivote
-    }
+		// Colocar el pivote en su posición final
+		swap(list, i + 1, high);
+		return i + 1;
+	}
 
-    // Método para intercambiar dos elementos en la lista
-    private static void swap(List<Integer> ls, int i, int j) {
-        Integer temp = ls.get(i);
-        ls.set(i, ls.get(j));
-        ls.set(j, temp);
-    }
+	private static int medianOfThree(List<Integer> list, int low, int mid, int high) {
+		int a = list.get(low);
+		int b = list.get(mid);
+		int c = list.get(high);
 
-    // Método principal para probar QuickSort
-    public static void main(String[] args) {
-        List<Integer> lista = List.of(29, 10, 14, 37, 13);
-        System.out.println("Lista original: " + lista);
-        List<Integer> mutableList = new ArrayList<>(lista); // Crear una lista mutable
-        quickSort(mutableList); // Ordenar in-place
-        System.out.println("Lista ordenada: " + mutableList);
-    }
+		if (a < b) {
+			if (b < c)
+				return mid; // a < b < c
+			if (a < c)
+				return high; // a < c < b
+			return low; // c < a < b
+		} else {
+			if (a < c)
+				return low; // b < a < c
+			if (b < c)
+				return high; // b < c < a
+			return mid; // c < b < a
+		}
+	}
+
+	private static void swap(List<Integer> list, int i, int j) {
+		int temp = list.get(i);
+		list.set(i, list.get(j));
+		list.set(j, temp);
+	}
+
+	public static void main(String[] args) {
+		// Ejemplo de uso
+		List<Integer> lista = new ArrayList<>(List.of(64, 34, 25, 12, 22, 11, 90));
+		System.out.println("Lista original: " + lista);
+		quickSort(lista);
+		System.out.println("Lista ordenada: " + lista);
+	}
 }
