@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.apache.commons.math3.fitting.WeightedObservedPoint;
 
 import algoritmos.ordenacion.BinarySort;
+import algoritmos.ordenacion.BubbleSort;
 import algoritmos.ordenacion.Listas;
 import algoritmos.ordenacion.MergeSort;
 import algoritmos.ordenacion.QuickSort;
@@ -21,7 +22,7 @@ public class SorterComplexity {
 	private static Integer nMin = 1000; // n mínimo para el cálculo
 	private static Integer nMax = 10000; // n máximo para el cálculo
 	private static Integer nIncr = 1000; // incremento en los valores de n del cálculo
-	private static Integer nIter = 50; // número de iteraciones para cada medición de tiempo
+	private static Integer nIter = 5; // número de iteraciones para cada medición de tiempo
 	private static Integer nIterWarmup = 1000; // número de iteraciones para warmup
 
 	// Método para generar datos de QuickSort
@@ -50,6 +51,17 @@ public class SorterComplexity {
 		});
 		GenData.tiemposEjecucionAritmetica(f1, file, nMin, nMax, nIncr, nIter, nIterWarmup);
 	}
+	
+	// Método para generar datos de BubbleSort
+		public static void genDataBBS(List<Integer> ls) {
+			String file = "ficheros_generados/BBS.txt";
+			Function<Integer, Long> f1 = GenData.time(n -> {
+				List<Integer> mutableList = new ArrayList<>(ls.subList(0, n));
+				BubbleSort.bubbleSort(mutableList);
+			});
+			GenData.tiemposEjecucionAritmetica(f1, file, nMin, nMax, nIncr, nIter, nIterWarmup);
+		}
+
 
 	// Método para mostrar los resultados de QuickSort
 	public static void showQS() {
@@ -83,12 +95,23 @@ public class SorterComplexity {
 		System.out.println("BinarySort RMS: " + pl.getEvaluation().getRMS());
 		MatPlotLib.show(file, pl.getFunction(), pl.getExpression());
 	}
+	
+	// Método para mostrar los resultados de BubbleSort
+	public static void showBBS() {
+		String file = "ficheros_generados/BBS.txt";
+		List<WeightedObservedPoint> data = DataFile.points(file);
+		Fit pl = PowerLog.of();
+		pl.fit(data);
+		System.out.println("BubbleSort Expression: " + pl.getExpression());
+		System.out.println("BubbleSort RMS: " + pl.getEvaluation().getRMS());
+		MatPlotLib.show(file, pl.getFunction(), pl.getExpression());
+	}
 
 	// Método para mostrar los resultados combinados de todos los algoritmos
 	public static void showCombined() {
 		MatPlotLib.showCombined("Tiempos",
-				List.of("ficheros_generados/QS.txt", "ficheros_generados/MS.txt", "ficheros_generados/BS.txt"),
-				List.of("QuickSort", "MergeSort", "BinarySort"));
+				List.of("ficheros_generados/QS.txt", "ficheros_generados/MS.txt", "ficheros_generados/BS.txt","ficheros_generados/BBS.txt"),
+				List.of("QuickSort", "MergeSort", "BinarySort", "BubbleSort"));
 	}
 
 	// Método principal
@@ -99,12 +122,12 @@ public class SorterComplexity {
 		genDataQS(ls);
 		genDataMS(ls);
 		genDataBS(ls);
-
+		genDataBBS(ls);
 		// Mostrar resultados de cada algoritmo
 		showQS();
 		showMS();
 		showBS();
-
+		showBBS();
 		// Mostrar los resultados combinados
 		showCombined();
 	}
