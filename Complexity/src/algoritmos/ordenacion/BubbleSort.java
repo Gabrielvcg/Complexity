@@ -30,7 +30,7 @@ public class BubbleSort {
 	
 	public static void main(String[] args) {
 		
-		List<Integer> ls = Listas.generarLista(5, 10);
+		List<Integer> ls = Listas.generarLista(50, 1000);
 		System.out.println("Lista antes de ordenacion: "+ ls);
 		bubbleSort(ls);
 		System.out.println("Lista tras ordenacion: "+ ls);

@@ -19,9 +19,9 @@ import us.lsi.graphics.MatPlotLib;
 
 public class SorterComplexity {
 
-	private static Integer nMin = 1000; // n mínimo para el cálculo
-	private static Integer nMax = 10000; // n máximo para el cálculo
-	private static Integer nIncr = 1000; // incremento en los valores de n del cálculo
+	private static Integer nMin = 10000; // n mínimo para el cálculo
+	private static Integer nMax = 100000; // n máximo para el cálculo
+	private static Integer nIncr = 10000; // incremento en los valores de n del cálculo
 	private static Integer nIter = 5; // número de iteraciones para cada medición de tiempo
 	private static Integer nIterWarmup = 1000; // número de iteraciones para warmup
 

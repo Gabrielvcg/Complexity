@@ -19,8 +19,8 @@ public class FibonacciComplexity {
 
 	 
 		private static Integer nMin = 1; // n mínimo para el cálculo 
-		private static Integer nMax = 30; // n máximo para el cálculo 
-		private static Integer nIncr = 1; // incremento en los valores de n del cálculo 
+		private static Integer nMax = 3000; // n máximo para el cálculo 
+		private static Integer nIncr = 100; // incremento en los valores de n del cálculo 
 		private static Integer nIter = 50; // número de iteraciones para cada medición de tiempo
 		private static Integer nIterWarmup = 1000; // número de iteraciones para warmup
 		
@@ -35,6 +35,13 @@ public class FibonacciComplexity {
 	    public static void genDataFibMem() {
 	    	String file = "ficheros_generados/FIBMEM.txt";
 			Function<Integer,Long> f1 = GenData.time(n -> Fibonacci.fibonacciMemoria(n,new HashMap<Integer,Integer>()));
+//			Integer tMin,Integer tMax,Integer tInc,Integer numIter,Integer numIterWarmup
+			GenData.tiemposEjecucionAritmetica(f1,file,nMin,nMax,nIncr,nIter,nIterWarmup);
+	    }
+	    
+	    public static void genDataFibPD() {
+	    	String file = "ficheros_generados/FIBPD.txt";
+			Function<Integer,Long> f1 = GenData.time(n -> Fibonacci.fibonacciPD(n));
 //			Integer tMin,Integer tMax,Integer tInc,Integer numIter,Integer numIterWarmup
 			GenData.tiemposEjecucionAritmetica(f1,file,nMin,nMax,nIncr,nIter,nIterWarmup);
 	    }
@@ -62,18 +69,30 @@ public class FibonacciComplexity {
 	    }
 
 
+	    public static void showFibPD() {
+	        String file = "ficheros_generados/FIBPD.txt";
+	        List<WeightedObservedPoint> data = DataFile.points(file);
+	        Fit pl = Exponential.of();
+	        pl.fit(data);
+	        System.out.println(pl.getExpression());
+	        System.out.println(pl.getEvaluation().getRMS());
+	        MatPlotLib.show(file, pl.getFunction(), pl.getExpression());
+	    }
+	    
 	    public static void showCombined() {
 	        MatPlotLib.showCombined("Tiempos",
-	                List.of("ficheros_generados/FIB.txt", "ficheros_generados/FIBMEM.txt"),
-	                List.of("FIB", "FIBMEM"));
+	                List.of("ficheros_generados/FIB.txt", "ficheros_generados/FIBMEM.txt", "ficheros_generados/FIBPD.txt"),
+	                List.of("FIB", "FIBMEM", "FIBPD"));
 
 	    }
 
 	    public static void main(String[] args) {
 	    	//genDataFib();
-	     	//genDataFibMem();
+	     	genDataFibMem();
+	     	genDataFibPD();
 	    	showFib();
 	    	showFibMem();
+	    	showFibPD();
 	        showCombined();
 	    }
 	}
